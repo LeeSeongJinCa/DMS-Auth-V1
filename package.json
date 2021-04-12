@@ -1,0 +1,62 @@
+{
+  "name": "dms-auth-v1",
+  "version": "1.0.0",
+  "description": "dms auth v1",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeeSeongJinCa/DMS-Auth-V1.git"
+  },
+  "keywords": [
+    "dms"
+  ],
+  "author": "LeeSeongJinCa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeeSeongJinCa/DMS-Auth-V1/issues"
+  },
+  "homepage": "https://github.com/LeeSeongJinCa/DMS-Auth-V1#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-decorators": "^7.13.15",
+    "@babel/preset-env": "^7.12.11",
+    "@types/react": "^16.9.44",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.5",
+    "babel-loader": "^8.2.2",
+    "core-decorators": "^0.20.0",
+    "dotenv-webpack": "^6.0.0",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.1.5",
+    "@types/recoil": "^0.0.1",
+    "axios": "^0.21.1",
+    "css-loader": "^5.0.1",
+    "emotion": "^11.0.0",
+    "mobx": "^6.2.0",
+    "mobx-react": "^7.1.0",
+    "prettier": "^2.0.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "recoil": "^0.2.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "style-loader": "^2.0.0"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open --hot --port 3000",
+    "build": "webpack --mode production"
+  }
+}
