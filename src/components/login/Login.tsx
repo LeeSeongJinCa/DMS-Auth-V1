@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
+import { useHistory } from "react-router";
 import axios from "axios";
 
 import * as S from "./style";
 
 import { dmsLogoMint, loginFace, loginLock } from "../../assets";
-import { useHistory } from "react-router";
 import { BASE_URL } from "../../utils/api/client";
 import useInput from "../../utils/hooks/useInput";
 import urlParams from "../../utils/function/urlParams";
@@ -39,9 +39,9 @@ const Login = () => {
     window.location.href = `/redirect-code?code=${code}`;
   };
 
-  const checkValidDialog = async () => {
+  const checkValidDialog = () => {
     try {
-      await axios.get(
+      axios.get(
         `${BASE_URL}/auth/dialog?auth_id=${auth_id}&redirect_uri=${redirect_uri}`
       );
     } catch {
