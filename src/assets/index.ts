@@ -6,3 +6,5 @@ export { default as itemDot } from "./dot.svg";
 export { default as loginFace } from "./login-face.svg";
 export { default as loginLock } from "./login-lock.svg";
 export { default as unused } from "./unused-black.svg";
+export { default as error } from "./error.svg";
+export { default as close } from "./close.svg";
