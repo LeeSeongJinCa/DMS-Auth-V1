@@ -1,8 +1,18 @@
-import React, { FC } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import * as S from "./style";
+import ServiceApplyModal from "./ServiceApplyModal";
 
 import { dmsLogoMint, itemDot, keyCheckMint } from "../../assets";
+import useModal from "../../utils/hooks/useModal";
+import { BASE_URL } from "../../utils/api/client";
+
+export type Service = {
+  auth_id: string;
+  logo_uri: string;
+  service_name: string;
+};
 
 const Input = ({
   title,
@@ -38,7 +48,15 @@ const RedirectItem = ({ url }: { url: string }) => {
   );
 };
 
-const ServiceItem = ({ name, id }: { name: string; id: string }) => {
+const ServiceItem = ({
+  name,
+  id,
+  logo_uri
+}: {
+  name: string;
+  id: string;
+  logo_uri: string;
+}) => {
   return (
     <li>
       <img src={dmsLogoMint} alt="auth logo" title="auth logo" />
@@ -51,6 +69,35 @@ const ServiceItem = ({ name, id }: { name: string; id: string }) => {
 };
 
 const Dashboard = () => {
+  const [modal, openModal, closeModal] = useModal();
+  const [step, setStep] = useState<number>(0);
+  const [services, setServices] = useState<Service[]>([]);
+
+  const onClickNextStep = () => {
+    setStep(prev => prev + 1);
+  };
+
+  const resetStep = () => {
+    setStep(0);
+  };
+
+  const getAllServiceList = async () => {
+    const res = await axios.get<{ services: Service[] }>(
+      `${BASE_URL}/service/list`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`
+        }
+      }
+    );
+    console.log(res);
+    setServices(res.data.services);
+  };
+
+  useEffect(() => {
+    getAllServiceList();
+  }, []);
+
   return (
     <S.DashboardWrap>
       <img src={dmsLogoMint} alt="logo" />
@@ -111,23 +158,31 @@ const Dashboard = () => {
       <aside>
         <div className="service-list">
           <ul>
-            {Array(2)
-              .fill(0)
-              .map((_, i) => (
-                <ServiceItem
-                  key={i}
-                  name={"DMS-OAuth V" + (i + 1)}
-                  id="DMS-OAuth-2057a007-b8ba-418f-a4eb-6a9b98251f49"
-                />
-              ))}
+            {services.map(({ auth_id, logo_uri, service_name }) => (
+              <ServiceItem
+                key={auth_id}
+                name={service_name}
+                id={auth_id}
+                logo_uri={logo_uri}
+              />
+            ))}
           </ul>
         </div>
         <div className="user-info">
           <h3>3학년 2반 7번 손민기</h3>
-          <button>서비스 등록</button>
+          <button onClick={openModal}>서비스 등록</button>
           <a href="/">로그아웃</a>
         </div>
       </aside>
+      {modal && (
+        <ServiceApplyModal
+          step={step}
+          resetStep={resetStep}
+          closeModal={closeModal}
+          onClickNextStep={onClickNextStep}
+          getAllServiceList={getAllServiceList}
+        />
+      )}
     </S.DashboardWrap>
   );
 };

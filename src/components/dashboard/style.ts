@@ -267,3 +267,68 @@ export const ItemWrap = styled.li`
     font-size: 12px;
   }
 `;
+
+export const ServiceApplyModalBackWrap = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 50%);
+`;
+
+export const ServiceApplyModalWrap = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  padding: 32px 40px;
+  border-radius: 16px;
+  background-color: white;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 16%);
+  > h1 {
+    font-size: 24px;
+  }
+  > p {
+    font-size: 14px;
+  }
+  > img {
+    position: absolute;
+    top: 32px;
+    right: 40px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+  > label {
+    display: flex;
+    height: 28px;
+    border: 1px solid var(--symbol-color);
+    border-radius: 10px;
+    &:first-of-type {
+      margin-top: 60px;
+    }
+    &:not(:first-of-type) {
+      margin-top: 12px;
+    }
+    > input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 10px;
+    }
+  }
+  button {
+    padding: 0 24px;
+    border: 1px solid var(--symbol-color);
+    border-radius: 8px;
+    background-color: var(--symbol-color);
+    color: white;
+    &.finish {
+      float: right;
+      margin-top: 12px;
+      padding: 8px 32px;
+    }
+  }
+`;
