@@ -9,6 +9,7 @@ export const LoginWrap = styled.form`
   border-radius: 24px;
   background-color: white;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 16%);
+  text-align: center;
   > div {
     text-align: center;
     > img {
@@ -26,6 +27,9 @@ export const LoginWrap = styled.form`
     }
   }
   > main {
+    width: 260px;
+  }
+  > .login-main {
     margin: 24px 0;
     > label {
       display: flex;
@@ -38,11 +42,32 @@ export const LoginWrap = styled.form`
         height: 16px;
       }
       > input {
-        width: 220px;
+        width: 100%;
         margin-left: 6px;
         padding: 0 4px;
         border: 0;
         background-color: transparent;
+      }
+    }
+  }
+  > .agreement-main {
+    > p {
+      margin: 8px 0;
+    }
+    > div {
+      display: flex;
+      align-items: center;
+      margin: 8px;
+      > img {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        border: 1px solid black;
+        border-radius: 50%;
+      }
+      > span {
+        color: #818181;
+        font-size: 14px;
       }
     }
   }
