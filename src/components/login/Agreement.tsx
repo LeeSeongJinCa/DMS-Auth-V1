@@ -1,12 +1,25 @@
-import React, { FC } from "react";
+import React from "react";
 
 import * as S from "./style";
 
 import { dmsLogoMint, keyCheckBlack, unused } from "../../assets";
 
-interface Props {}
+const info = [
+  {
+    use: true,
+    name: "아이디"
+  },
+  {
+    use: true,
+    name: "이름"
+  },
+  {
+    use: true,
+    name: "학번"
+  }
+];
 
-const Agreement: FC<Props> = () => {
+const Agreement = () => {
   return (
     <S.LoginWrap>
       <div>
@@ -14,18 +27,16 @@ const Agreement: FC<Props> = () => {
       </div>
       <main className="agreement-main">
         <p>DMS-AUTH가 서비스에 제공하는 정보</p>
-        <div>
-          <img src={unused} alt="unused" title="unused" />
-          <span>아이디</span>
-        </div>
-        <div>
-          <img src={keyCheckBlack} alt="used" title="used" />
-          <span>이름</span>
-        </div>
-        <div>
-          <img src={keyCheckBlack} alt="used" title="used" />
-          <span>학번</span>
-        </div>
+        {info.map(({ use, name }) => (
+          <div key={name}>
+            <img
+              src={use ? keyCheckBlack : unused}
+              alt={use ? "used" : "unused"}
+              title={use ? "used" : "unused"}
+            />
+            <span>{name}</span>
+          </div>
+        ))}
       </main>
       <div>
         <button>동의</button>
