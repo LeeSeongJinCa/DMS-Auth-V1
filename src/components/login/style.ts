@@ -26,6 +26,9 @@ export const LoginWrap = styled.form`
       text-align: center;
     }
   }
+  > h1 {
+    font-size: 24px;
+  }
   > main {
     width: 260px;
   }
@@ -69,6 +72,30 @@ export const LoginWrap = styled.form`
         color: #818181;
         font-size: 14px;
       }
+    }
+  }
+  .error-main {
+    display: flex;
+    width: 400px;
+    margin: 12px 0;
+    border: 1px solid #fa3e3d;
+    border-radius: 4px;
+    > div {
+      width: 15%;
+      padding-top: 12px;
+      background-color: #fa3e3d;
+      box-sizing: border-box;
+      > img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+    > p {
+      width: 90%;
+      padding: 12px;
+      font-size: 14px;
+      box-sizing: border-box;
+      text-align: left;
     }
   }
 `;
