@@ -6,6 +6,7 @@ import "./App.css";
 const Main = lazy(() => import("./components/main/Main"));
 const Login = lazy(() => import("./components/login/Login"));
 const Agreement = lazy(() => import("./components/login/Agreement"));
+const DashBoard = lazy(() => import("./components/dashboard/Dashboard"));
 
 const App: FC<{}> = () => {
   return (
@@ -14,6 +15,7 @@ const App: FC<{}> = () => {
         <Switch>
           <Route exact path="/" component={Main} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/dashboard" component={DashBoard} />
           <Route exact path="/privacy-policy-agreement" component={Agreement} />
         </Switch>
       </Suspense>
