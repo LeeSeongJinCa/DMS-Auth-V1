@@ -8,11 +8,6 @@ import useInput from "../../utils/hooks/useInput";
 import urlParams from "../../utils/function/urlParams";
 import { getAuthValidation, postLogin } from "../../utils/api/apis";
 
-type Dialog = {
-  code: string;
-  is_accepted: boolean;
-};
-
 const redirect_uri = urlParams.get("redirect_uri");
 const auth_id = urlParams.get("auth_id");
 
@@ -33,9 +28,9 @@ const Login = () => {
     window.location.href = `/redirect-code?code=${code}`;
   };
 
-  const checkValidDialog = () => {
+  const checkValidDialog = async () => {
     try {
-      getAuthValidation(auth_id, redirect_uri);
+      await getAuthValidation(auth_id, redirect_uri);
     } catch {
       history.push("/error");
     }
