@@ -12,9 +12,9 @@ import AppInfo from "./AppInfo";
 import RedirectURIs from "./RedirectURIs";
 import ManagerInfo from "./ManagerInfo";
 import ServiceList from "./ServiceList";
+import Menu from "./Menu";
 
 import { dmsLogoMint, keyCheckMint } from "../../assets";
-import useModal from "../../utils/hooks/useModal";
 import {
   deleteService,
   getServiceInfo,
@@ -24,7 +24,7 @@ import {
   ServiceInfo
 } from "../../utils/api/apis";
 import useToggle from "../../utils/hooks/useToggle";
-import Menu from "./Menu";
+import useBool from "../../utils/hooks/useBoolean";
 
 type InputType = {
   title: string;
@@ -65,7 +65,8 @@ export const Input = ({ title, button = false, inputAttr }: InputType) => {
 };
 
 const Dashboard = () => {
-  const [modal, openModal, closeModal] = useModal();
+  const [loading, startLoading, endLoading] = useBool();
+  const [modal, openModal, closeModal] = useBool();
   const [step, setStep] = useState<number>(0);
   const [services, setServices] = useState<Service[]>([]);
   const [authId, setAuthId] = useState<string>("");
@@ -80,8 +81,10 @@ const Dashboard = () => {
   };
 
   const getAllServiceList = async () => {
+    startLoading();
     const res = await getServices();
     setServices(res.data.services);
+    endLoading();
   };
 
   const onClickAuthId = (e: MouseEvent<HTMLLIElement>) => {
@@ -173,7 +176,12 @@ const Dashboard = () => {
         />
         <Menu openModal={openModal} removeService={removeService} />
       </aside>
-      {!authId && <p>이런, 아직 등록된 서비스가 하나도 없어요 {`:(`}</p>}
+      {!authId &&
+        (loading ? (
+          <p>서비스 정보를 가져오는 중이에요.</p>
+        ) : (
+          <p>이런, 아직 등록된 서비스가 하나도 없어요 {`:(`}</p>
+        ))}
       {modal && (
         <ServiceApplyModal
           step={step}
