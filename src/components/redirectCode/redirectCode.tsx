@@ -5,6 +5,7 @@ import { getAccessToken } from "../../utils/api/apis";
 import urlParams from "../../utils/function/urlParams";
 
 const code = urlParams.get("code");
+const redirect_uri = urlParams.get("redirect_uri");
 
 const RedirectCode = () => {
   const history = useHistory();
@@ -17,7 +18,11 @@ const RedirectCode = () => {
   };
 
   useEffect(() => {
-    postCode();
+    if (redirect_uri) {
+      window.location.href = `${redirect_uri}?code=${code}`;
+    } else {
+      postCode();
+    }
   }, []);
 
   return (
