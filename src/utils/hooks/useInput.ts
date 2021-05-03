@@ -4,8 +4,8 @@ export type InputElements = HTMLInputElement & HTMLTextAreaElement;
 
 export type OnChangeEvent = ChangeEvent<InputElements>;
 
-const useInput = () => {
-  const [input, setInput] = useState<string>("");
+const useInput = (defaultValue: string = "") => {
+  const [input, setInput] = useState<string>(defaultValue);
 
   const onChangeInput = useCallback((e: OnChangeEvent) => {
     setInput(e.currentTarget.value);
