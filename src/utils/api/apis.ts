@@ -125,5 +125,5 @@ export const deleteService = (auth_id: string) => {
 };
 
 export const getStudentInfo = () => {
-  return api.get<Student>("/student");
+  return api.get<Student>("/service/student");
 };
