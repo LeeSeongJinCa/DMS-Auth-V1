@@ -56,7 +56,7 @@
     "style-loader": "^2.0.0"
   },
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --hot --port 3000",
+    "start": "webpack-dev-server --mode development --open --hot --port 3002",
     "build": "webpack --mode production"
   }
 }
