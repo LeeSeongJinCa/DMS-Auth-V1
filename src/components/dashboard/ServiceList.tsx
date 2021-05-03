@@ -32,7 +32,7 @@ const ServiceItem = ({
     >
       <img src={dmsLogoMint} alt="auth logo" title={`auth logo ${logo_uri}`} />
       <div>
-        <h3>{name}</h3>
+        <p>{name}</p>
         <p>{id}</p>
       </div>
     </li>

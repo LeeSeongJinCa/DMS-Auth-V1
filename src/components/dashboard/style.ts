@@ -177,12 +177,12 @@ export const DashboardWrap = styled.div`
               display: flex;
               flex-direction: column;
               justify-content: center;
-              > h3 {
-                font-size: 16px;
-              }
               > p {
                 color: #818181;
                 font-size: 8px;
+                &:first-of-type {
+                  font-size: 16px;
+                }
               }
             }
           }
