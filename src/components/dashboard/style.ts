@@ -4,8 +4,21 @@ export const DashboardWrap = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 32px;
+  &.empty {
+    > main,
+    .service-list {
+      opacity: 0;
+    }
+  }
   > img {
     align-self: flex-start;
+  }
+  > p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
   }
   > main {
     margin: 0 24px;
@@ -64,6 +77,7 @@ export const DashboardWrap = styled.div`
                   border-radius: 10px 0 0 10px;
                 }
                 > button {
+                  margin: 0;
                   padding: 0 28px;
                   border: 1px solid var(--symbol-color);
                   border-radius: 8px;
@@ -104,7 +118,7 @@ export const DashboardWrap = styled.div`
         }
       }
     }
-    > button {
+    button {
       float: right;
       margin-top: 12px;
       padding: 6px 32px;
@@ -149,6 +163,10 @@ export const DashboardWrap = styled.div`
             margin-bottom: 12px;
             padding-bottom: 4px;
             border-bottom: 1px solid #c2c2c2;
+            cursor: pointer;
+            &.selected {
+              background-color: rgba(66, 255, 118, 50%);
+            }
             > img {
               margin-right: 12px;
               width: 40px;
@@ -179,12 +197,18 @@ export const DashboardWrap = styled.div`
         > button {
           width: 100%;
           padding: 8px 24px;
-          border: 1px solid var(--symbol-color);
           border-radius: 10px;
-          background-color: var(--symbol-color);
           color: white;
           font-size: 16px;
           text-align: right;
+          &.apply {
+            border: 1px solid var(--symbol-color);
+            background-color: var(--symbol-color);
+          }
+          &.remove {
+            border: 1px solid #ff6d6d;
+            background-color: #ff6d6d;
+          }
         }
         > a {
           display: block;
@@ -243,10 +267,12 @@ export const InputWrap = styled.label<{ disabled: boolean }>`
       display: flex;
       align-items: center;
       justify-content: center;
+      margin: 0;
       padding: 2px;
       border: 0;
-      background-color: white;
       border-radius: 6px;
+      background-color: white;
+      color: black;
       > span {
         margin-left: 4px;
         font-size: 12px;
@@ -256,15 +282,27 @@ export const InputWrap = styled.label<{ disabled: boolean }>`
 `;
 
 export const ItemWrap = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 8px;
   color: #818181;
-  > img {
+  > div {
+    display: flex;
+    align-items: center;
     width: 10px;
     height: 10px;
+    > span {
+      margin-left: 8px;
+      font-size: 12px;
+    }
   }
-  > span {
-    margin-left: 8px;
-    font-size: 12px;
+  > img {
+    width: 12px;
+    height: 12px;
+    border: 1px solid black;
+    border-radius: 50%;
+    cursor: pointer;
   }
 `;
 

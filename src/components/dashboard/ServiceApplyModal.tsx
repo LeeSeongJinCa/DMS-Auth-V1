@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import { ServiceApplyModalWrap, ServiceApplyModalBackWrap } from "./style";
@@ -100,10 +100,8 @@ const ServiceApplyModalTwo = ({
 };
 
 const ServiceApplyModalThree = ({
-  closeModal,
   finishCreateService
 }: {
-  closeModal: () => void;
   finishCreateService: () => void;
 }) => {
   return (
@@ -112,7 +110,11 @@ const ServiceApplyModalThree = ({
       <ServiceApplyModalWrap>
         <h1>서비스가 생성되었습니다!</h1>
         <p>관리 페이지에서 설정을 마저 해주세요.</p>
-        <button className="finish" onClick={finishCreateService}>
+        <button
+          autoFocus={true}
+          className="finish"
+          onClick={finishCreateService}
+        >
           확인
         </button>
       </ServiceApplyModalWrap>
@@ -141,8 +143,11 @@ const ServiceApplyModalPortal = (props: {
   const createService = async () => {
     try {
       await postService(name, email, organization);
+      alert("서비스 등록 성공");
       onClickNextStep();
-    } catch (err) {}
+    } catch (err) {
+      alert("서비스 등록 실패");
+    }
   };
 
   const finishCreateService = async () => {
@@ -183,10 +188,7 @@ const ServiceApplyModalPortal = (props: {
     );
   } else if (step === 2) {
     return ReactDOM.createPortal(
-      <ServiceApplyModalThree
-        closeModal={closeModal}
-        finishCreateService={finishCreateService}
-      />,
+      <ServiceApplyModalThree finishCreateService={finishCreateService} />,
       document.getElementById("modal")
     );
   }
@@ -194,4 +196,4 @@ const ServiceApplyModalPortal = (props: {
   return null;
 };
 
-export default ServiceApplyModalPortal;
+export default memo(ServiceApplyModalPortal);

@@ -1,28 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  InputHTMLAttributes,
+  MouseEvent,
+  useEffect,
+  useState
+} from "react";
 
 import * as S from "./style";
 import ServiceApplyModal from "./ServiceApplyModal";
+import ServiceInfoComponent from "./ServiceInfo";
+import AppInfo from "./AppInfo";
+import RedirectURIs from "./RedirectURIs";
+import ManagerInfo from "./ManagerInfo";
+import ServiceList from "./ServiceList";
 
-import { dmsLogoMint, itemDot, keyCheckMint } from "../../assets";
+import { dmsLogoMint, keyCheckMint } from "../../assets";
 import useModal from "../../utils/hooks/useModal";
-import { getServices, Service } from "../../utils/api/apis";
+import {
+  deleteService,
+  getServiceInfo,
+  getServices,
+  putServiceInfo,
+  Service,
+  ServiceInfo
+} from "../../utils/api/apis";
+import useToggle from "../../utils/hooks/useToggle";
+import Menu from "./Menu";
 
-const Input = ({
-  title,
-  disabled = false,
-  button = false
-}: {
+type InputType = {
   title: string;
-  disabled?: boolean;
   button?: boolean;
-}) => {
+  inputAttr?: InputHTMLAttributes<HTMLInputElement>;
+};
+
+const serviceInit = {
+  app_name: "",
+  auth_id: "",
+  logo_uri: "",
+  manager_email: "",
+  manager_name: "",
+  manager_number: 0,
+  organization: "",
+  redirect_uris: [],
+  secret_key: "",
+  support_email: ""
+};
+
+export const Input = ({ title, button = false, inputAttr }: InputType) => {
+  const [key, toggleKey] = useToggle(!button);
+
   return (
-    <S.InputWrap disabled={disabled}>
+    <S.InputWrap disabled={inputAttr.disabled}>
       <p>{title}</p>
       <div>
-        <input type="text" disabled={disabled} />
+        <input type={key ? "text" : "password"} {...inputAttr} />
         {button && (
-          <button>
+          <button onClick={toggleKey}>
             <img src={keyCheckMint} alt="check" title="check" />
             <span>키 보기</span>
           </button>
@@ -32,39 +64,12 @@ const Input = ({
   );
 };
 
-const RedirectItem = ({ url }: { url: string }) => {
-  return (
-    <S.ItemWrap>
-      <img src={itemDot} alt="dot" title="dot" />
-      <span>{url}</span>
-    </S.ItemWrap>
-  );
-};
-
-const ServiceItem = ({
-  name,
-  id,
-  logo_uri
-}: {
-  name: string;
-  id: string;
-  logo_uri: string;
-}) => {
-  return (
-    <li>
-      <img src={dmsLogoMint} alt="auth logo" title={`auth logo ${logo_uri}`} />
-      <div>
-        <h3>{name}</h3>
-        <p>{id}</p>
-      </div>
-    </li>
-  );
-};
-
 const Dashboard = () => {
   const [modal, openModal, closeModal] = useModal();
   const [step, setStep] = useState<number>(0);
   const [services, setServices] = useState<Service[]>([]);
+  const [authId, setAuthId] = useState<string>("");
+  const [service, setService] = useState<ServiceInfo>(serviceInit);
 
   const onClickNextStep = () => {
     setStep(prev => prev + 1);
@@ -79,86 +84,96 @@ const Dashboard = () => {
     setServices(res.data.services);
   };
 
+  const onClickAuthId = (e: MouseEvent<HTMLLIElement>) => {
+    setAuthId(e.currentTarget.dataset["authId"]);
+  };
+
+  const getService = async () => {
+    const res = await getServiceInfo(authId);
+    setService(res.data);
+  };
+
+  const changeServiceInfo = async (
+    name: string,
+    email: string,
+    organization: string
+  ) => {
+    try {
+      await putServiceInfo(authId, name, email, organization, "");
+      alert("수정 성공");
+    } catch (err) {
+      alert("수정 실패");
+    }
+  };
+
+  const removeService = async () => {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+    try {
+      await deleteService(authId);
+      await getAllServiceList();
+      alert("삭제 성공");
+    } catch (err) {
+      alert("삭제 실패");
+    }
+  };
+
   useEffect(() => {
     getAllServiceList();
   }, []);
+  useEffect(() => {
+    if (services.length) {
+      setAuthId(services[0].auth_id);
+    } else {
+      setAuthId("");
+    }
+  }, [services]);
+  useEffect(() => {
+    if (authId) {
+      getService();
+    }
+  }, [authId]);
 
   return (
-    <S.DashboardWrap>
+    <S.DashboardWrap className={authId ? "" : "empty"}>
       <img src={dmsLogoMint} alt="logo" />
       <main>
-        <h1>DMS-OAuth V1</h1>
+        <h1>{service.app_name}</h1>
         <div>
           <div>
-            <div>
-              <h2>앱 정보</h2>
-              <p>앱에 대한 정보를 입력합니다.</p>
-              <Input title="앱 ID" disabled={true} />
-              <Input title="Secret Key" disabled={true} button={true} />
-            </div>
-            <div>
-              <h2>사용자에게 보여질 정보</h2>
-              <p>로그인 시 사용자에게 제공될 정보입니다.</p>
-              <Input title="앱 이름" />
-              <Input title="지원 이메일" />
-              <Input title="소속" />
-              <label className="logo-wrap">
-                <p>로고 이미지</p>
-                <div>
-                  <img src={dmsLogoMint} alt="logo" title="logo" />
-                </div>
-              </label>
-            </div>
+            <AppInfo
+              auth_id={service.auth_id}
+              secret_key={service.secret_key}
+            />
+            <ServiceInfoComponent
+              app_name={service.app_name}
+              support_email={service.support_email}
+              organization={service.organization}
+              changeServiceInfo={changeServiceInfo}
+            />
           </div>
           <div>
-            <div className="redirect-url">
-              <h2>Redirect URIs</h2>
-              <p>정상적으로 로그인을 한 후, Redirect 될 URI입니다.</p>
-              <div>
-                <ul>
-                  <RedirectItem url="https://127.0.0.1:5000" />
-                  <RedirectItem url="https://127.0.0.1:5000/123" />
-                  <RedirectItem url="https://127.0.0.1:5000/456" />
-                </ul>
-                <div className="add-redirect-url">
-                  <input type="text" />
-                  <button>추가</button>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h2>Manager</h2>
-              <p>
-                서비스의 매니저 정보입니다. 문제 발생시 관리자가 확인할 때
-                사용합니다.
-              </p>
-              <Input title="이름" />
-              <Input title="학번" />
-              <Input title="이메일" />
-            </div>
+            <RedirectURIs
+              auth_id={service.auth_id}
+              redirect_uris={service.redirect_uris}
+              getService={getService}
+            />
+            <ManagerInfo
+              manager_name={service.manager_name}
+              manager_number={service.manager_number}
+              manager_email={service.manager_email}
+            />
           </div>
         </div>
-        <button>저장</button>
       </main>
       <aside>
-        <div className="service-list">
-          <ul>
-            {services.map(({ auth_id, logo_uri, service_name }) => (
-              <ServiceItem
-                key={auth_id}
-                name={service_name}
-                id={auth_id}
-                logo_uri={logo_uri}
-              />
-            ))}
-          </ul>
-        </div>
-        <div className="user-info">
-          <h3>3학년 2반 7번 손민기</h3>
-          <button onClick={openModal}>서비스 등록</button>
-          <a href="/">로그아웃</a>
-        </div>
+        <ServiceList
+          services={services}
+          authId={authId}
+          onClickAuthId={onClickAuthId}
+        />
+        <Menu openModal={openModal} removeService={removeService} />
       </aside>
+      {!authId && <p>이런, 아직 등록된 서비스가 하나도 없어요 {`:(`}</p>}
       {modal && (
         <ServiceApplyModal
           step={step}
