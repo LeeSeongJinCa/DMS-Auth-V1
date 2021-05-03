@@ -1,12 +1,11 @@
-import axios from "axios";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import { ServiceApplyModalWrap, ServiceApplyModalBackWrap } from "./style";
 
 import { close } from "../../assets";
-import { BASE_URL } from "../../utils/api/client";
 import useInput, { OnChangeEvent } from "../../utils/hooks/useInput";
+import { postService } from "../../utils/api/apis";
 
 const ServiceApplyModalOne = ({
   name,
@@ -141,19 +140,7 @@ const ServiceApplyModalPortal = (props: {
 
   const createService = async () => {
     try {
-      await axios.post(
-        `${BASE_URL}/service`,
-        {
-          name,
-          email,
-          organization
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`
-          }
-        }
-      );
+      await postService(name, email, organization);
       onClickNextStep();
     } catch (err) {}
   };

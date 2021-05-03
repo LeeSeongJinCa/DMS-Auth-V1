@@ -1,23 +1,16 @@
-import axios from "axios";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router";
+import { getAccessToken } from "../../utils/api/apis";
 
-import { BASE_URL } from "../../utils/api/client";
 import urlParams from "../../utils/function/urlParams";
 
 const code = urlParams.get("code");
-
-type AccessToken = { access_token: string };
 
 const RedirectCode = () => {
   const history = useHistory();
 
   const postCode = async () => {
-    const {
-      data: { access_token }
-    } = await axios.post<AccessToken>(`${BASE_URL}/service/auth`, {
-      code: code
-    });
+    const { access_token } = (await getAccessToken(code)).data;
 
     localStorage.setItem("access_token", access_token);
     history.push("/dashboard");

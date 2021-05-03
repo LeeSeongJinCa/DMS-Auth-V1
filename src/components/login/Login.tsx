@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router";
-import axios from "axios";
 
 import * as S from "./style";
 
 import { dmsLogoMint, loginFace, loginLock } from "../../assets";
-import { BASE_URL } from "../../utils/api/client";
 import useInput from "../../utils/hooks/useInput";
 import urlParams from "../../utils/function/urlParams";
+import { getAuthValidation, postLogin } from "../../utils/api/apis";
 
 type Dialog = {
   code: string;
@@ -23,14 +22,9 @@ const Login = () => {
   const [pw, onChangePw] = useInput();
 
   const login = async () => {
-    const {
-      data: { code, is_accepted }
-    } = await axios.post<Dialog>(`${BASE_URL}/auth/dialog`, {
-      auth_id: auth_id,
-      redirect_uri: redirect_uri,
-      id: id,
-      password: pw
-    });
+    const { code, is_accepted } = (
+      await postLogin(auth_id, redirect_uri, id, pw)
+    ).data;
 
     if (!is_accepted) {
       history.push("/privacy-policy-agreement");
@@ -41,9 +35,7 @@ const Login = () => {
 
   const checkValidDialog = () => {
     try {
-      axios.get(
-        `${BASE_URL}/auth/dialog?auth_id=${auth_id}&redirect_uri=${redirect_uri}`
-      );
+      getAuthValidation(auth_id, redirect_uri);
     } catch {
       history.push("/error");
     }

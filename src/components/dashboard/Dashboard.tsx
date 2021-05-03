@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 
 import * as S from "./style";
 import ServiceApplyModal from "./ServiceApplyModal";
 
 import { dmsLogoMint, itemDot, keyCheckMint } from "../../assets";
 import useModal from "../../utils/hooks/useModal";
-import { BASE_URL } from "../../utils/api/client";
-
-export type Service = {
-  auth_id: string;
-  logo_uri: string;
-  service_name: string;
-};
+import { getServices, Service } from "../../utils/api/apis";
 
 const Input = ({
   title,
@@ -59,7 +52,7 @@ const ServiceItem = ({
 }) => {
   return (
     <li>
-      <img src={dmsLogoMint} alt="auth logo" title="auth logo" />
+      <img src={dmsLogoMint} alt="auth logo" title={`auth logo ${logo_uri}`} />
       <div>
         <h3>{name}</h3>
         <p>{id}</p>
@@ -82,15 +75,7 @@ const Dashboard = () => {
   };
 
   const getAllServiceList = async () => {
-    const res = await axios.get<{ services: Service[] }>(
-      `${BASE_URL}/service/list`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`
-        }
-      }
-    );
-    console.log(res);
+    const res = await getServices();
     setServices(res.data.services);
   };
 
