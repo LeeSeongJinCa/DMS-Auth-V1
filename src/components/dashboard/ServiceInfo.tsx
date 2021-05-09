@@ -1,37 +1,33 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, MouseEvent, useEffect } from "react";
+import { useRecoilValue } from "recoil";
 
 import { Input } from "./Dashboard";
 
 import { dmsLogoMint } from "../../assets";
 import { ServiceInfo } from "../../utils/api/apis";
 import useInput from "../../utils/hooks/useInput";
+import { serviceInfoState } from "../../atoms/dashboard";
 
 type ServiceInfoType = {
-  app_name: string;
-  support_email: string;
-  organization: string;
-  changeServiceInfo: (
-    name: string,
-    email: string,
-    organization: string
-  ) => Promise<void>;
+  changeServiceInfo: (e: MouseEvent<HTMLButtonElement>) => Promise<void>;
 };
 
-const ServiceInfo = ({
-  app_name,
-  support_email,
-  organization,
-  changeServiceInfo
-}: ServiceInfoType) => {
+const ServiceInfo = ({ changeServiceInfo }: ServiceInfoType) => {
+  const state = useRecoilValue(serviceInfoState);
+  const { app_name, support_email, organization } = state;
   const [name, onChangeName, setName] = useInput(app_name);
   const [email, onChangeEmail, setEmail] = useInput(support_email);
   const [group, onChangeGroup, setGroup] = useInput(organization);
 
   useEffect(() => {
     setName(app_name);
+  }, [app_name]);
+  useEffect(() => {
     setEmail(support_email);
+  }, [support_email]);
+  useEffect(() => {
     setGroup(organization);
-  }, [app_name, support_email, organization]);
+  }, [organization]);
 
   return (
     <div>
@@ -64,7 +60,12 @@ const ServiceInfo = ({
           <img src={dmsLogoMint} alt="logo" title="logo" />
         </div>
       </label>
-      <button onClick={() => changeServiceInfo(name, email, group)}>
+      <button
+        data-name={name}
+        data-email={email}
+        data-group={group}
+        onClick={changeServiceInfo}
+      >
         저장
       </button>
     </div>

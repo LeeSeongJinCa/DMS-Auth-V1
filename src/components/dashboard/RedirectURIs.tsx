@@ -1,14 +1,14 @@
 import React, { memo } from "react";
+import { useRecoilValue } from "recoil";
 
 import { ItemWrap } from "./style";
 
 import { close, itemDot } from "../../assets";
 import useInput from "../../utils/hooks/useInput";
 import { deleteURI, postURI } from "../../utils/api/apis";
+import { serviceInfoState } from "../../atoms/dashboard";
 
 type Props = {
-  auth_id: string;
-  redirect_uris: string[];
   getService: () => Promise<void>;
 };
 
@@ -48,7 +48,8 @@ const RedirectItem = ({ auth_id, url, getService }: RedirectItemType) => {
   );
 };
 
-const RedirectURIs = ({ auth_id, redirect_uris, getService }: Props) => {
+const RedirectURIs = ({ getService }: Props) => {
+  const { auth_id, redirect_uris } = useRecoilValue(serviceInfoState);
   const [uri, onChangeURI, setURI] = useInput();
 
   const addURI = async () => {

@@ -1,18 +1,14 @@
 import React, { memo } from "react";
+import { useRecoilValue } from "recoil";
 
 import { Input } from "./Dashboard";
 
-type Props = {
-  manager_name: string;
-  manager_number: number;
-  manager_email: string;
-};
+import { serviceInfoState } from "../../atoms/dashboard";
 
-const ManagerInfo = ({
-  manager_name,
-  manager_number,
-  manager_email
-}: Props) => {
+const ManagerInfo = () => {
+  const state = useRecoilValue(serviceInfoState);
+  const { manager_name, manager_number, manager_email } = state;
+
   return (
     <div>
       <h2>Manager</h2>
