@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 
 export const DashboardWrap = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   margin: 32px 0;
@@ -315,6 +316,10 @@ export const InputWrap = styled.label<{ disabled: boolean }>`
       border-radius: 6px;
       background-color: white;
       color: black;
+      > img {
+        width: 14px;
+        height: 14px;
+      }
       > span {
         margin-left: 4px;
         font-size: 12px;
