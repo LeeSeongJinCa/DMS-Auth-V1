@@ -25,6 +25,8 @@ import {
 } from "../../utils/api/apis";
 import useToggle from "../../utils/hooks/useToggle";
 import useBool from "../../utils/hooks/useBoolean";
+import { useRecoilState } from "recoil";
+import { serviceInfoState } from "../../atoms/dashboard";
 
 type InputType = {
   title: string;
@@ -71,6 +73,9 @@ const Dashboard = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [authId, setAuthId] = useState<string>("");
   const [service, setService] = useState<ServiceInfo>(serviceInit);
+  const [service2, setService2] = useRecoilState(serviceInfoState);
+
+  console.log(service2);
 
   const onClickNextStep = () => {
     setStep(prev => prev + 1);
@@ -140,7 +145,7 @@ const Dashboard = () => {
     <S.DashboardWrap className={authId ? "" : "empty"}>
       <img src={dmsLogoMint} alt="logo" />
       <main>
-        <h1>{service.app_name}</h1>
+        <h1>{service.app_name || "불러오는 중입니다."}</h1>
         <div>
           <div>
             <AppInfo

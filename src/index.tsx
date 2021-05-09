@@ -1,5 +1,6 @@
 import React, { StrictMode } from "react";
 import ReactDOM from "react-dom";
+import { RecoilRoot } from "recoil";
 
 import App from "./App";
 import { StoreProvider } from "./stores/Context";
@@ -9,9 +10,11 @@ const rootStore = new RootStore();
 
 ReactDOM.render(
   <StrictMode>
-    <StoreProvider value={rootStore}>
-      <App />
-    </StoreProvider>
+    <RecoilRoot>
+      <StoreProvider value={rootStore}>
+        <App />
+      </StoreProvider>
+    </RecoilRoot>
   </StrictMode>,
   document.getElementById("root")
 );
