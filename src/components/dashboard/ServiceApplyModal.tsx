@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import React, { FC, memo, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import { ServiceApplyModalWrap, ServiceApplyModalBackWrap } from "./style";
@@ -6,6 +6,18 @@ import { ServiceApplyModalWrap, ServiceApplyModalBackWrap } from "./style";
 import { close } from "../../assets";
 import useInput, { OnChangeEvent } from "../../utils/hooks/useInput";
 import { postService } from "../../utils/api/apis";
+
+const ServiceApplyModalTemplate: FC<{ closeModal: () => void }> = ({
+  children,
+  closeModal
+}) => {
+  return (
+    <>
+      <ServiceApplyModalBackWrap onClick={closeModal} />
+      <ServiceApplyModalWrap>{children}</ServiceApplyModalWrap>
+    </>
+  );
+};
 
 const ServiceApplyModalOne = ({
   name,
@@ -19,30 +31,27 @@ const ServiceApplyModalOne = ({
   onChangeName: (e: OnChangeEvent) => void;
 }) => {
   return (
-    <>
-      <ServiceApplyModalBackWrap />
-      <ServiceApplyModalWrap>
-        <h1>서비스 생성하기</h1>
-        <p>생성할 서비스의 이름을 알려주세요</p>
-        <img
-          src={close}
-          onClick={closeModal}
-          alt="close modal"
-          title="close modal"
+    <ServiceApplyModalTemplate closeModal={closeModal}>
+      <h1>서비스 생성하기</h1>
+      <p>생성할 서비스의 이름을 알려주세요</p>
+      <img
+        src={close}
+        onClick={closeModal}
+        alt="close modal"
+        title="close modal"
+      />
+      <label>
+        <input
+          type="text"
+          placeholder="서비스 이름"
+          value={name}
+          onChange={onChangeName}
+          onKeyPress={e => e.key === "Enter" && onClickNextStep()}
+          autoFocus={true}
         />
-        <label>
-          <input
-            type="text"
-            placeholder="서비스 이름"
-            value={name}
-            onChange={onChangeName}
-            onKeyPress={e => e.key === "Enter" && onClickNextStep()}
-            autoFocus={true}
-          />
-          <button onClick={onClickNextStep}>확인</button>
-        </label>
-      </ServiceApplyModalWrap>
-    </>
+        <button onClick={onClickNextStep}>확인</button>
+      </label>
+    </ServiceApplyModalTemplate>
   );
 };
 
@@ -62,63 +71,61 @@ const ServiceApplyModalTwo = ({
   createService: () => void;
 }) => {
   return (
-    <>
-      <ServiceApplyModalBackWrap />
-      <ServiceApplyModalWrap>
-        <h1>서비스 생성하기</h1>
-        <p>생성할 서비스의 이름을 알려주세요</p>
-        <img
-          src={close}
-          onClick={closeModal}
-          alt="close modal"
-          title="close modal"
+    <ServiceApplyModalTemplate closeModal={closeModal}>
+      <h1>서비스 생성하기</h1>
+      <p>생성할 서비스의 이름을 알려주세요</p>
+      <img
+        src={close}
+        onClick={closeModal}
+        alt="close modal"
+        title="close modal"
+      />
+      <label>
+        <input
+          type="text"
+          placeholder="서비스 이메일"
+          value={email}
+          onChange={onChangeEmail}
+          autoFocus={true}
         />
-        <label>
-          <input
-            type="text"
-            placeholder="서비스 이메일"
-            value={email}
-            onChange={onChangeEmail}
-            autoFocus={true}
-          />
-        </label>
-        <label>
-          <input
-            type="text"
-            placeholder="소속 그룹 (개인일 경우 개인으로 입력)"
-            value={organization}
-            onChange={onChangeOrganization}
-            onKeyPress={e => e.key === "Enter" && createService()}
-          />
-        </label>
-        <button className="finish" onClick={createService}>
-          확인
-        </button>
-      </ServiceApplyModalWrap>
-    </>
+      </label>
+      <label>
+        <input
+          type="text"
+          placeholder="소속 그룹 (개인일 경우 개인으로 입력)"
+          value={organization}
+          onChange={onChangeOrganization}
+          onKeyPress={e => e.key === "Enter" && createService()}
+        />
+      </label>
+      <button className="finish" onClick={createService}>
+        확인
+      </button>
+    </ServiceApplyModalTemplate>
   );
 };
 
 const ServiceApplyModalThree = ({
+  closeModal,
   finishCreateService
 }: {
+  closeModal: () => void;
   finishCreateService: () => void;
 }) => {
   return (
-    <>
-      <ServiceApplyModalBackWrap />
-      <ServiceApplyModalWrap>
-        <h1>서비스가 생성되었습니다!</h1>
-        <p>관리 페이지에서 설정을 마저 해주세요.</p>
-        <button
-          autoFocus={true}
-          className="finish"
-          onClick={finishCreateService}
-        >
-          확인
-        </button>
-      </ServiceApplyModalWrap>
-    </>
+    <ServiceApplyModalTemplate closeModal={closeModal}>
+      <h1>서비스가 생성되었습니다!</h1>
+      <p>관리 페이지에서 설정을 마저 해주세요.</p>
+      <img
+        src={close}
+        onClick={closeModal}
+        alt="close modal"
+        title="close modal"
+      />
+      <button autoFocus={true} className="finish" onClick={finishCreateService}>
+        확인
+      </button>
+    </ServiceApplyModalTemplate>
   );
 };
 
@@ -188,7 +195,10 @@ const ServiceApplyModalPortal = (props: {
     );
   } else if (step === 2) {
     return ReactDOM.createPortal(
-      <ServiceApplyModalThree finishCreateService={finishCreateService} />,
+      <ServiceApplyModalThree
+        finishCreateService={finishCreateService}
+        closeModal={closeModal}
+      />,
       document.getElementById("modal")
     );
   }
