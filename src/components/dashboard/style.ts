@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 export const DashboardWrap = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 32px;
+  margin: 32px 0;
   &.empty {
     > main,
     .service-list {
@@ -11,6 +11,8 @@ export const DashboardWrap = styled.div`
     }
   }
   > img {
+    width: 60px;
+    height: 60px;
     align-self: flex-start;
   }
   > p {
@@ -132,6 +134,7 @@ export const DashboardWrap = styled.div`
   > aside {
     display: flex;
     flex-direction: column;
+    margin: 0 24px;
     > div {
       width: 400px;
       padding: 24px;
@@ -235,6 +238,45 @@ export const DashboardWrap = styled.div`
     }
     > aside > div {
       width: 300px;
+    }
+  }
+  @media screen and (max-width: 1250px) {
+    > main > div > div > div {
+      width: 250px;
+    }
+    > aside > div {
+      width: 250px;
+    }
+  }
+  @media screen and (max-width: 1100px) {
+    > main > div {
+      flex-direction: column;
+      > div:first-of-type {
+        margin-right: 0;
+        margin-bottom: 12px;
+      }
+      > div:last-of-type {
+        margin-left: 0;
+        margin-top: 12px;
+      }
+      > div > div {
+        width: auto;
+      }
+    }
+    > aside > div {
+      width: auto;
+    }
+  }
+  @media screen and (max-width: 800px) {
+    & {
+      display: block;
+    }
+    > img {
+      display: block;
+      margin: auto;
+    }
+    > aside {
+      margin: 24px;
     }
   }
 `;
@@ -367,6 +409,14 @@ export const ServiceApplyModalWrap = styled.div`
       float: right;
       margin-top: 12px;
       padding: 8px 32px;
+    }
+  }
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    padding: 32px 0;
+    > *:not(img) {
+      margin-right: 48px;
+      margin-left: 48px;
     }
   }
 `;
